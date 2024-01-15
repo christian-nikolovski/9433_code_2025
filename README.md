@@ -7,7 +7,7 @@
 - install WPIlib tools
 - install g++
 - Delete the `Phoenix.json` file.
-- Install the latest vendor library for phoenix using the following link: [https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2023-latest.json](https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2023-latest.json).
+- Install the latest vendor library for phoenix using the following link: [https://docs.ctr-electronics.com/]](https://docs.ctr-electronics.com/).
 - gradle build
 - done.
 - (note these steps are just a reminder for how I got everything working, will make a more detailed version later)
