@@ -2,6 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+#include <math.h>
 #include "Robot.h"
 #include <unistd.h>
 #include <iostream>
@@ -15,12 +16,15 @@
 #include <thread>
 #include <chrono>
 #include "cameraserver/CameraServer.h"
+#include <frc/AnalogGyro.h>
 
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
 void Robot::RobotInit() {
 	std::cout << "-- LTBT Robot Program Start --" << std::endl;
+
+	m_gyro.Calibrate();
 
 	// frc::CameraServer::StartAutomaticCapture();
 
@@ -84,11 +88,12 @@ void Robot::TeleopPeriodic()
 	// it will stay at the loop until it is completed (essentially freezing your robot).
 	// Teleop is already called every cycle, so use this to your advantage.
 
+	//backL.Set(0.5);
 
 	using namespace frc;
 	// create drive object	
 	// // DeadZone, MaxSpeed
-	// Drive newMec(0.02, 0.8);
+	//Drive newMec(0.02, 0.8);
 	double joyYPower = joystick.GetY() * fabs(joystick.GetY());
 	double joyZPower = joystick.GetZ() * fabs(joystick.GetZ());
 	double joyXPower = joystick.GetX() * fabs(joystick.GetX());
@@ -103,9 +108,11 @@ void Robot::TeleopPeriodic()
 	// 	joyXPower = 0;
 	// }
 
-	mec_drive.DriveCartesian(-joyZPower * speed, joyXPower * speed, joyYPower * speed);
+	//mec_drive.DriveCartesian(-joyZPower * speed, joyXPower * speed, joyYPower * speed);
+	//double turningValue = (0 - m_gyro.GetAngle()) * kP; * (M_PI / 180, 0)
+	frc::Rotation2d radianAngle = Rotation2d(m_gyro.GetAngle(), 0);
 
-	//mec_drive.DriveCartesian(0, 0, 0.25);
+	mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed, radianAngle);
 
 	// Create new arm object
 	double _leftJoy = -controller.GetRawAxis(1); 

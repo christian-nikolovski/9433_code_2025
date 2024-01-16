@@ -14,6 +14,9 @@
 #include <frc/Joystick.h>
 #include <frc/drive/MecanumDrive.h>
 #include <frc/filter/SlewRateLimiter.h>
+#include <frc/AnalogGyro.h>
+#include <frc/ADXRS450_Gyro.h>
+#include <frc/SPI.h>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -29,6 +32,10 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
   
  private:
+
+	// static constexpr SPI::Port kGyroPort = 0;
+	frc::AnalogGyro m_gyro{0};
+	double kP = 0.005;
 
 	frc::Joystick joystick{1};
 
@@ -60,7 +67,7 @@ class Robot : public frc::TimedRobot {
 
 	
 	double maxSpeed = 0.65;
-	double speed = 0.5;
+	double speed = 0.3;
 	double autoSpeed = -0.5; 
 
 	frc::SlewRateLimiter<units::scalar> filter{0.9 / 1_s};	
