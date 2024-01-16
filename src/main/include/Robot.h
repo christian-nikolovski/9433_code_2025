@@ -34,21 +34,21 @@ class Robot : public frc::TimedRobot {
 
 	frc::Joystick controller{5};
  
-    
-	WPI_VictorSPX frontL {4};
-	WPI_VictorSPX backL {5};
+	// Left
+	WPI_VictorSPX frontL {2};
+	WPI_VictorSPX backL {1};
 
 
 	// Right
-	WPI_VictorSPX frontR {3};
-	WPI_VictorSPX backR {2};
+	WPI_VictorSPX frontR {4};
+	WPI_VictorSPX backR {3};
 
 	frc::MecanumDrive mec_drive{frontL, backL, frontR, backR};
 
-	WPI_VictorSPX bendOne {6};
-	WPI_VictorSPX bendTwo {1};
-	WPI_VictorSPX intake1 {0};
-	WPI_VictorSPX intake2 {7};
+	WPI_VictorSPX bendOne {10};
+	WPI_VictorSPX bendTwo {11};
+	WPI_VictorSPX intake1 {12};
+	WPI_VictorSPX intake2 {13};
 
 
 	int _leftTrigger = controller.GetRawAxis(2);
@@ -60,7 +60,7 @@ class Robot : public frc::TimedRobot {
 
 	
 	double maxSpeed = 0.65;
-	double speed = 0.55;
+	double speed = 0.5;
 	double autoSpeed = -0.5; 
 
 	frc::SlewRateLimiter<units::scalar> filter{0.9 / 1_s};	

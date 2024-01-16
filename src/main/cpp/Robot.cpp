@@ -91,19 +91,21 @@ void Robot::TeleopPeriodic()
 	// Drive newMec(0.02, 0.8);
 	double joyYPower = joystick.GetY() * fabs(joystick.GetY());
 	double joyZPower = joystick.GetZ() * fabs(joystick.GetZ());
-	double joyXPower;
-	double joySliderPower = 1 - ((joystick.GetRawAxis(4) + 1) / 2);
+	double joyXPower = joystick.GetX() * fabs(joystick.GetX());
+	//double joySliderPower = 1 - ((joystick.GetRawAxis(4) + 1) / 2);
 
-	if (fabs(joyYPower) > 0.1)
-	{
-		joyXPower = joystick.GetX() * fabs(joystick.GetX());
-	}
-	else
-	{
-		joyXPower = 0;
-	}
+	// if (fabs(joyYPower) > 0.1)
+	// {
+	// 	joyXPower = joystick.GetX() * fabs(joystick.GetX());
+	// }
+	// else
+	// {
+	// 	joyXPower = 0;
+	// }
 
-	mec_drive.DriveCartesian(-joyZPower * joySliderPower * 0.5, joyYPower * joySliderPower, joyXPower * joySliderPower * 0.25);
+	mec_drive.DriveCartesian(-joyZPower * speed, joyXPower * speed, joyYPower * speed);
+
+	//mec_drive.DriveCartesian(0, 0, 0.25);
 
 	// Create new arm object
 	double _leftJoy = -controller.GetRawAxis(1); 
