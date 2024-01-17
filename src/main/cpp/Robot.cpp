@@ -25,6 +25,7 @@ void Robot::RobotInit() {
 	std::cout << "-- LTBT Robot Program Start --" << std::endl;
 
 	m_gyro.Calibrate();
+	
 
 	// frc::CameraServer::StartAutomaticCapture();
 
@@ -110,9 +111,16 @@ void Robot::TeleopPeriodic()
 
 	//mec_drive.DriveCartesian(-joyZPower * speed, joyXPower * speed, joyYPower * speed);
 	//double turningValue = (0 - m_gyro.GetAngle()) * kP; * (M_PI / 180, 0)
-	frc::Rotation2d radianAngle = Rotation2d(m_gyro.GetAngle(), 0);
 
-	mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed, radianAngle);
+	frc::Rotation2d rotationAngle = Rotation2d(m_gyro.GetRotation2d());
+
+	std::cout << "GetAngle:" << m_gyro.GetAngle() << "\n";
+	std::cout << "GetRads:" << m_gyro.GetAngle() * (180 / M_PI) << "\n"; 
+	std::cout << "GetRate:" << m_gyro.GetRate() << "\n"; 
+	std::cout << "GetOffset:" << m_gyro.GetOffset() << "\n"; 
+	
+
+	mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed, rotationAngle);
 
 	// Create new arm object
 	double _leftJoy = -controller.GetRawAxis(1); 
