@@ -17,8 +17,11 @@
 #include <frc/AnalogGyro.h>
 #include <frc/ADXRS450_Gyro.h>
 #include <frc/SPI.h>
+#include "AHRS.h"
+#include <iostream>
 
 class Robot : public frc::TimedRobot {
+ AHRS *ahrs;  
  public:
   void RobotInit() override;
   void RobotPeriodic() override;
@@ -30,12 +33,34 @@ class Robot : public frc::TimedRobot {
   void DisabledPeriodic() override;
   void TestInit() override;
   void TestPeriodic() override;
+
+  Robot() { 
+	try {
+			/***********************************************************************
+			 * navX-MXP:
+			 * - Communication via RoboRIO MXP (SPI, I2C, TTL UART) and USB.
+			 * - See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface.
+			 *
+			 * navX-Micro:
+			 * - Communication via I2C (RoboRIO MXP or Onboard) and USB.
+			 * - See http://navx-micro.kauailabs.com/guidance/selecting-an-interface.
+			 *
+			 * Multiple navX-model devices on a single robot are supported.
+			 ************************************************************************/
+        	ahrs = new AHRS(frc::I2C::Port::kMXP);
+        } 
+		catch (std::exception& ex ) {
+		 	std::cout << "error could not find AHRS!!" << "\n";
+        }
+		
+  } 
+
+  
   
  private:
 
 	// static constexpr SPI::Port kGyroPort = 0;
-	frc::AnalogGyro m_gyro{0};
-	double kP = 0.005;
+
 
 	frc::Joystick joystick{1};
 
@@ -71,5 +96,7 @@ class Robot : public frc::TimedRobot {
 	double autoSpeed = -0.5; 
 
 	frc::SlewRateLimiter<units::scalar> filter{0.9 / 1_s};	
+
+
 	
 };

@@ -24,7 +24,9 @@
 void Robot::RobotInit() {
 	std::cout << "-- LTBT Robot Program Start --" << std::endl;
 
-	m_gyro.Calibrate();
+	ahrs->Calibrate();
+	ahrs->Reset();
+
 	
 
 	// frc::CameraServer::StartAutomaticCapture();
@@ -80,7 +82,7 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit() 
 {
-	
+
 }
 
 void Robot::TeleopPeriodic() 
@@ -109,18 +111,24 @@ void Robot::TeleopPeriodic()
 	// 	joyXPower = 0;
 	// }
 
-	//mec_drive.DriveCartesian(-joyZPower * speed, joyXPower * speed, joyYPower * speed);
-	//double turningValue = (0 - m_gyro.GetAngle()) * kP; * (M_PI / 180, 0)
-
-	frc::Rotation2d rotationAngle = Rotation2d(m_gyro.GetRotation2d());
-
-	std::cout << "GetAngle:" << m_gyro.GetAngle() << "\n";
-	std::cout << "GetRads:" << m_gyro.GetAngle() * (180 / M_PI) << "\n"; 
-	std::cout << "GetRate:" << m_gyro.GetRate() << "\n"; 
-	std::cout << "GetOffset:" << m_gyro.GetOffset() << "\n"; 
 	
 
-	mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed, rotationAngle);
+	//std::cout << "GetAngle:" << ahrs->GetAngle() << "\n";
+	// std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
+	// std::cout << "GetDisX:" << ahrs->GetDisplacementX() << "\n";
+	// std::cout << "GetDisY:" << ahrs->GetDisplacementY() << "\n";
+	
+	// std::cout << "GetRate:" << ahrs->GetRate() << "\n"; 
+	// std::cout << "GetOffset:" << m_gyro.GetOffset() << "\n"; 
+	
+	double YawRads = ahrs->GetAngle() * (M_PI / 180);
+	double YawX = cos(YawRads);
+	double YawY = sin(YawRads);
+
+	frc::Rotation2d YawFinal = Rotation2d(YawX, YawY);
+
+	mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed, YawFinal);
+	//Wait(0.005_s); // wait 5ms to avoid hogging CPU cycles
 
 	// Create new arm object
 	double _leftJoy = -controller.GetRawAxis(1); 
