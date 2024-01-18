@@ -82,7 +82,7 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit() 
 {
-
+	ahrs->Reset();
 }
 
 void Robot::TeleopPeriodic() 
@@ -114,7 +114,7 @@ void Robot::TeleopPeriodic()
 	
 
 	//std::cout << "GetAngle:" << ahrs->GetAngle() << "\n";
-	// std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
+	std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
 	// std::cout << "GetDisX:" << ahrs->GetDisplacementX() << "\n";
 	// std::cout << "GetDisY:" << ahrs->GetDisplacementY() << "\n";
 	
@@ -127,8 +127,48 @@ void Robot::TeleopPeriodic()
 
 	frc::Rotation2d YawFinal = Rotation2d(YawX, YawY);
 
-	mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed, YawFinal);
+	//mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed);
 	//Wait(0.005_s); // wait 5ms to avoid hogging CPU cycles
+
+	double motors [4] = {0,0,0,0};
+
+	if (std::abs(joystick.GetX()) > 0.15 )
+	{
+		// if going left, spin left wheels outer from eachother, spin right inner
+		motors[0] += (-joystick.GetX() * fabs(joystick.GetX()) * 0.8);
+		motors[1] += (joystick.GetX() * fabs(joystick.GetX()) * 0.8);
+
+		motors[2] += (joystick.GetX() * fabs(joystick.GetX()) * 0.8);
+		motors[3] += (-joystick.GetX() * fabs(joystick.GetX()) * 0.8);
+	}
+
+	if (std::abs(joystick.GetY()) > 0.2 )
+	{
+		// left
+		motors[0] += (joystick.GetY() * fabs(joystick.GetY()));
+		motors[1] += (joystick.GetY() * fabs(joystick.GetY()));
+
+		// right
+		motors[2] += (-joystick.GetY() * fabs(joystick.GetY()));
+		motors[3] += (-joystick.GetY() * fabs(joystick.GetY()));
+	}
+
+	if (std::abs(joystick.GetZ()) > 0.4 )
+	{
+		// left
+		motors[0] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 0.65);
+		motors[1] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 0.65);
+
+		// right
+		motors[2] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 0.65);
+		motors[3] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 0.65);
+	}
+
+	frontL.Set(motors[0] * speed);
+	backL.Set(motors[1] * speed);
+
+	backR.Set(motors[2] * speed);
+	frontR.Set(motors[3] * speed);
 
 	// Create new arm object
 	double _leftJoy = -controller.GetRawAxis(1); 

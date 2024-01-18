@@ -67,13 +67,13 @@ class Robot : public frc::TimedRobot {
 	frc::Joystick controller{5};
  
 	// Left
-	WPI_VictorSPX frontL {2};
-	WPI_VictorSPX backL {1};
+	WPI_VictorSPX frontL {1};
+	WPI_VictorSPX backL {0};
 
 
 	// Right
-	WPI_VictorSPX frontR {4};
-	WPI_VictorSPX backR {3};
+	WPI_VictorSPX frontR {3};
+	WPI_VictorSPX backR {2};
 
 	frc::MecanumDrive mec_drive{frontL, backL, frontR, backR};
 
@@ -91,8 +91,8 @@ class Robot : public frc::TimedRobot {
 
 
 	
-	double maxSpeed = 0.65;
-	double speed = 0.3;
+	double maxSpeed = 0.9;
+	double speed = 0.7;
 	double autoSpeed = -0.5; 
 
 	frc::SlewRateLimiter<units::scalar> filter{0.9 / 1_s};	
