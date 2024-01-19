@@ -122,35 +122,38 @@ void Robot::TeleopPeriodic()
 	// std::cout << "GetOffset:" << m_gyro.GetOffset() << "\n"; 
 	
 	double YawRads = ahrs->GetAngle() * (M_PI / 180);
-	double YawX = cos(YawRads);
-	double YawY = sin(YawRads);
+	// double YawX = cos(YawRads);
+	// double YawY = sin(YawRads);
 
-	frc::Rotation2d YawFinal = Rotation2d(YawX, YawY);
+	// frc::Rotation2d YawFinal = Rotation2d(YawX, YawY);
 
 	//mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed);
 	//Wait(0.005_s); // wait 5ms to avoid hogging CPU cycles
+ // Invert stick Y axis
+	double x_rotated = joyXPower * cos(YawRads) - joyYPower * sin(YawRads);
+	double y_rotated = joyXPower * sin(YawRads) + joyYPower * cos(YawRads);
 
 	double motors [4] = {0,0,0,0};
 
 	if (std::abs(joystick.GetX()) > 0.15 )
 	{
 		// if going left, spin left wheels outer from eachother, spin right inner
-		motors[0] += (-joystick.GetX() * fabs(joystick.GetX()) * 0.8);
-		motors[1] += (joystick.GetX() * fabs(joystick.GetX()) * 0.8);
+		motors[0] += (-x_rotated * 0.8);
+		motors[1] += (x_rotated * 0.8);
 
-		motors[2] += (joystick.GetX() * fabs(joystick.GetX()) * 0.8);
-		motors[3] += (-joystick.GetX() * fabs(joystick.GetX()) * 0.8);
+		motors[2] += (x_rotated * 0.8);
+		motors[3] += (-x_rotated * 0.8);
 	}
 
 	if (std::abs(joystick.GetY()) > 0.2 )
 	{
 		// left
-		motors[0] += (joystick.GetY() * fabs(joystick.GetY()));
-		motors[1] += (joystick.GetY() * fabs(joystick.GetY()));
+		motors[0] += (y_rotated);
+		motors[1] += (y_rotated);
 
 		// right
-		motors[2] += (-joystick.GetY() * fabs(joystick.GetY()));
-		motors[3] += (-joystick.GetY() * fabs(joystick.GetY()));
+		motors[2] += (-y_rotated);
+		motors[3] += (-y_rotated);
 	}
 
 	if (std::abs(joystick.GetZ()) > 0.4 )
