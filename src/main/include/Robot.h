@@ -19,6 +19,7 @@
 #include <frc/SPI.h>
 #include "AHRS.h"
 #include <iostream>
+#include <rev/CANSparkMax.h>
 
 class Robot : public frc::TimedRobot {
  AHRS *ahrs;  
@@ -64,7 +65,7 @@ class Robot : public frc::TimedRobot {
 
 	frc::Joystick joystick{1};
 
-	frc::Joystick controller{5};
+	frc::Joystick controller{2};
  
 	// Left
 	WPI_VictorSPX frontL {1};
@@ -77,17 +78,19 @@ class Robot : public frc::TimedRobot {
 
 	frc::MecanumDrive mec_drive{frontL, backL, frontR, backR};
 
-	WPI_VictorSPX bendOne {10};
-	WPI_VictorSPX bendTwo {11};
-	WPI_VictorSPX intake1 {12};
-	WPI_VictorSPX intake2 {13};
+	WPI_VictorSPX climber {4};
+	// WPI_VictorSPX bendTwo {11};
+	// WPI_VictorSPX intake1 {12};
+	// WPI_VictorSPX intake2 {13};
+
+	//frc::Spark shooter{5};
+	rev::CANSparkMax shooter{5, rev::CANSparkMax::MotorType::kBrushless};
 
 
 	int _leftTrigger = controller.GetRawAxis(2);
 	int _rightTrigger = controller.GetRawAxis(3);
 
 	int _xButton = controller.GetRawButton(3);
-	int _yButton = controller.GetRawButton(4);
 
 
 	

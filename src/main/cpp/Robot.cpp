@@ -114,7 +114,7 @@ void Robot::TeleopPeriodic()
 	
 
 	//std::cout << "GetAngle:" << ahrs->GetAngle() << "\n";
-	std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
+	// std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
 	// std::cout << "GetDisX:" << ahrs->GetDisplacementX() << "\n";
 	// std::cout << "GetDisY:" << ahrs->GetDisplacementY() << "\n";
 	
@@ -184,45 +184,70 @@ void Robot::TeleopPeriodic()
 
     double leftPower = leftJoy;
     double rightPower = _rightJoy * fabs(_rightJoy);
-    
-    if (_bButton)
-    {
-        bendOne.Set(0);
-		bendTwo.Set(0);
-    }
-    else if (joyYPower < 0.7)
-    {
-        bendOne.Set(-rightPower * maxSpeed);
-        bendTwo.Set(-leftPower * maxSpeed);
-    }
-	else if (joyYPower > 0.7)
+
+	if (_bButton)
 	{
-		bendOne.Set(ControlMode::PercentOutput,-0.1);
-		bendTwo.Set(ControlMode::PercentOutput,0.1); 
+		shooter.Set(-1);
+		std::cout << "SHOOT!" << "\n"; 
 	}
+	else
+	{
+		shooter.Set(0);
+	}
+	int _yButton = controller.GetRawButton(4);
+	int _aButton = controller.GetRawButton(1);
+
+	if (_yButton)
+	{
+		climber.Set(0.2);
+	}
+	else if (_aButton)
+	{
+		climber.Set(-0.2);
+	}
+	else
+	{
+		climber.Set(0);
+	}
+    
+    // if (_bButton)
+    // {
+    //     bendOne.Set(0);
+	// 	bendTwo.Set(0);
+    // }
+    // else if (joyYPower < 0.7)
+    // {
+    //     bendOne.Set(-rightPower * maxSpeed);
+    //     bendTwo.Set(-leftPower * maxSpeed);
+    // }
+	// else if (joyYPower > 0.7)
+	// {
+	// 	bendOne.Set(ControlMode::PercentOutput,-0.1);
+	// 	bendTwo.Set(ControlMode::PercentOutput,0.1); 
+	//}
 
 
 	int _lBumper = controller.GetRawButton(5);
 	int _rBumper = controller.GetRawButton(6);
 	
 
-    if (_rBumper)
-    {
-        speed = 0.5;
-		intake1.Set(speed);
-        intake2.Set(-speed);
-    }
-    else if (_lBumper)
-    {
-        speed = 0.8;
-		intake1.Set(-speed);
-        intake2.Set(speed);
-    }
-    else
-    {
-        intake1.Set(0);
-        intake2.Set(0);
-    }
+    // if (_rBumper)
+    // {
+    //     speed = 0.5;
+	// 	intake1.Set(speed);
+    //     intake2.Set(-speed);
+    // }
+    // else if (_lBumper)
+    // {
+    //     speed = 0.8;
+	// 	intake1.Set(-speed);
+    //     intake2.Set(speed);
+    // }
+    // else
+    // {
+    //     intake1.Set(0);
+    //     intake2.Set(0);
+    // }
 
 }
 
