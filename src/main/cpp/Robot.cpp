@@ -24,8 +24,8 @@
 void Robot::RobotInit() {
 	std::cout << "-- LTBT Robot Program Start --" << std::endl;
 
-	ahrs->Calibrate();
-	ahrs->Reset();
+	// ahrs->Calibrate();
+	// ahrs->Reset();
 
 	
 
@@ -82,7 +82,7 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit() 
 {
-	ahrs->Reset();
+	// ahrs->Reset();
 }
 
 void Robot::TeleopPeriodic() 
@@ -121,7 +121,7 @@ void Robot::TeleopPeriodic()
 	// std::cout << "GetRate:" << ahrs->GetRate() << "\n"; 
 	// std::cout << "GetOffset:" << m_gyro.GetOffset() << "\n"; 
 	
-	double YawRads = ahrs->GetAngle() * (M_PI / 180);
+	//double YawRads = ahrs->GetAngle() * (M_PI / 180);
 	// double YawX = cos(YawRads);
 	// double YawY = sin(YawRads);
 
@@ -130,8 +130,10 @@ void Robot::TeleopPeriodic()
 	//mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed);
 	//Wait(0.005_s); // wait 5ms to avoid hogging CPU cycles
  // Invert stick Y axis
-	double x_rotated = joyXPower * cos(YawRads) - joyYPower * sin(YawRads);
-	double y_rotated = joyXPower * sin(YawRads) + joyYPower * cos(YawRads);
+	// double x_rotated = joyXPower * cos(YawRads) - joyYPower * sin(YawRads);
+	// double y_rotated = joyXPower * sin(YawRads) + joyYPower * cos(YawRads);
+	double x_rotated = joyXPower;
+	double y_rotated = joyYPower;
 
 	double motors [4] = {0,0,0,0};
 
@@ -188,7 +190,7 @@ void Robot::TeleopPeriodic()
 	if (_bButton)
 	{
 		shooter.Set(-1);
-		std::cout << "SHOOT!" << "\n"; 
+		// std::cout << "SHOOT!" << "\n"; 
 	}
 	else
 	{
