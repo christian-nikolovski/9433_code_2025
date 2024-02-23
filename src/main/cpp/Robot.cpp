@@ -183,19 +183,38 @@ void Robot::TeleopPeriodic()
 	double _rightJoy = controller.GetRawAxis(5);
 	int _bButton = controller.GetRawButton(2);
 
+	// if (_bButton) {
+	// 	arm.Set(-0.1);
+	// }
+	// else {
+	// 	arm.Set(0);
+	// }
+
 
     double leftPower = leftJoy;
     double rightPower = _rightJoy * fabs(_rightJoy);
 
-	if (_bButton)
-	{
-		shooter.Set(-1);
-		// std::cout << "SHOOT!" << "\n"; 
+	if (_rightJoy >= 0.25){
+		arm.Set(0.1);
 	}
-	else
-	{
-		shooter.Set(0);
+	else if (_rightJoy <= -0.15){
+		arm.Set(-0.2);
 	}
+	else {
+		arm.Set(0);
+	}
+
+	
+
+	// if (_bButton)
+	// {
+	// 	shooter.Set(-1);
+	// 	// std::cout << "SHOOT!" << "\n"; 
+	// }
+	// else
+	// {
+	// 	shooter.Set(0);
+	// }
 	int _yButton = controller.GetRawButton(4);
 	int _aButton = controller.GetRawButton(1);
 
@@ -233,23 +252,23 @@ void Robot::TeleopPeriodic()
 	int _rBumper = controller.GetRawButton(6);
 	
 
-    // if (_rBumper)
-    // {
-    //     speed = 0.5;
-	// 	intake1.Set(speed);
-    //     intake2.Set(-speed);
-    // }
-    // else if (_lBumper)
-    // {
-    //     speed = 0.8;
-	// 	intake1.Set(-speed);
-    //     intake2.Set(speed);
-    // }
-    // else
-    // {
-    //     intake1.Set(0);
-    //     intake2.Set(0);
-    // }
+    if (_rBumper)
+    {
+        speed = 1;
+		intake.Set(speed);
+     
+    }
+    else if (_lBumper)
+    {
+        speed = 0.75;
+		intake.Set(-speed);
+       
+    }
+    else
+    {
+        intake.Set(0);
+     
+    }
 
 }
 

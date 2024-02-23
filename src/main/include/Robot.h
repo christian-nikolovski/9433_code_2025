@@ -84,7 +84,9 @@ class Robot : public frc::TimedRobot {
 	// WPI_VictorSPX intake2 {13};
 
 	//frc::Spark shooter{5};
-	rev::CANSparkMax shooter{5, rev::CANSparkMax::MotorType::kBrushless};
+	rev::CANSparkMax intake{5, rev::CANSparkMax::MotorType::kBrushless};
+
+	WPI_VictorSPX arm{6};
 
 
 	int _leftTrigger = controller.GetRawAxis(2);
