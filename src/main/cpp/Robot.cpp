@@ -17,6 +17,8 @@
 #include <chrono>
 #include "cameraserver/CameraServer.h"
 #include <frc/AnalogGyro.h>
+#include <cameraserver/cameraserver.h>
+#include <frc/TimedRobot.h>
 
 
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -24,11 +26,12 @@
 void Robot::RobotInit() {
 	std::cout << "-- LTBT Robot Program Start --" << std::endl;
 
-	// ahrs->Calibrate();
+	cs::UsbCamera camera = frc::CameraServer::StartAutomaticCapture();
 	// ahrs->Reset();
-
+	camera.SetResolution(640, 480);
+	cs::CvSink cvSink = frc::CameraServer::GetVideo();
+	cs::CvSource outputStream = frc::CameraServer::PutVideo("Video", 640, 480);
 	
-
 	// frc::CameraServer::StartAutomaticCapture();
 
 	// cs::CvSink cvSink = frc::CameraServer::GetVideo();
@@ -140,11 +143,11 @@ void Robot::TeleopPeriodic()
 	if (std::abs(joystick.GetX()) > 0.15 )
 	{
 		// if going left, spin left wheels outer from eachother, spin right inner
-		motors[0] += (-x_rotated * 0.8);
-		motors[1] += (x_rotated * 0.8);
+		motors[0] += (x_rotated * 0.8);
+		motors[1] += (-x_rotated * 0.8);
 
-		motors[2] += (x_rotated * 0.8);
-		motors[3] += (-x_rotated * 0.8);
+		motors[2] += (-x_rotated * 0.8);
+		motors[3] += (x_rotated * 0.8);
 	}
 
 	if (std::abs(joystick.GetY()) > 0.2 )
@@ -161,12 +164,12 @@ void Robot::TeleopPeriodic()
 	if (std::abs(joystick.GetZ()) > 0.4 )
 	{
 		// left
-		motors[0] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 0.65);
-		motors[1] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 0.65);
+		motors[0] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 1);
+		motors[1] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 1);
 
 		// right
-		motors[2] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 0.65);
-		motors[3] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 0.65);
+		motors[2] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 1);
+		motors[3] -= (joystick.GetZ() * fabs(joystick.GetZ()) * 1);
 	}
 
 	frontL.Set(motors[0] * speed);
@@ -194,11 +197,11 @@ void Robot::TeleopPeriodic()
     double leftPower = leftJoy;
     double rightPower = _rightJoy * fabs(_rightJoy);
 
-	if (_rightJoy >= 0.25){
-		arm.Set(0.1);
+	if (_rightJoy >= 0.1){
+		arm.Set(_rightJoy*_rightJoy*0.1);
 	}
-	else if (_rightJoy <= -0.15){
-		arm.Set(-0.2);
+	else if (_rightJoy <= -0.1){
+		arm.Set(_rightJoy*_rightJoy*-0.4);
 	}
 	else {
 		arm.Set(0);
@@ -220,11 +223,11 @@ void Robot::TeleopPeriodic()
 
 	if (_yButton)
 	{
-		climber.Set(0.2);
+		climber.Set(0.4);
 	}
 	else if (_aButton)
 	{
-		climber.Set(-0.2);
+		climber.Set(-0.25);
 	}
 	else
 	{
@@ -248,20 +251,19 @@ void Robot::TeleopPeriodic()
 	//}
 
 
-	int _lBumper = controller.GetRawButton(5);
-	int _rBumper = controller.GetRawButton(6);
-	
+	// int _lBumper = controller.GetRawButton(5);
+	// int _rBumper = controller.GetRawButton(6);
 
-    if (_rBumper)
+    if (_leftJoy >= 0.1)
     {
-        speed = 1;
-		intake.Set(speed);
+        armSpeed = _leftJoy*_leftJoy*1;
+		intake.Set(armSpeed);
      
     }
-    else if (_lBumper)
+    else if (_leftJoy <= -0.1)
     {
-        speed = 0.75;
-		intake.Set(-speed);
+        armSpeed = _leftJoy*_leftJoy*0.6;
+		intake.Set(-armSpeed);
        
     }
     else
