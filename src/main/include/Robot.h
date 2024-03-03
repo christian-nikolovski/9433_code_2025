@@ -66,6 +66,7 @@ class Robot : public frc::TimedRobot {
 	frc::Joystick joystick{1};
 
 	frc::Joystick controller{2};
+	frc::Joystick controller2{3};
  
 	// Left
 	WPI_VictorSPX frontL {1};
