@@ -84,7 +84,7 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit() 
 {
-	// ahrs->Reset();
+	ahrs->Reset();
 }
 
 void Robot::TeleopPeriodic() 
@@ -99,9 +99,33 @@ void Robot::TeleopPeriodic()
 	// create drive object	
 	// // DeadZone, MaxSpeed
 	//Drive newMec(0.02, 0.8);
-	double joyYPower = joystick.GetY();
-	double joyZPower = joystick.GetZ();
-	double joyXPower = joystick.GetX();
+	double joyYPower;
+	double joyZPower;
+	double joyXPower;
+
+	if (std::abs(joystick.GetY()) > 0.15 )
+	{
+		joyXPower = joystick.GetY();
+	}
+	else {
+		joyXPower = 0;
+	}
+
+	if (std::abs(joystick.GetX()) > 0.2 )
+	{
+		joyYPower = joystick.GetX();
+	}
+	else {
+		joyYPower = 0;
+	}
+
+	if (std::abs(joystick.GetZ()) > 0.4 )
+	{
+		joyZPower = joystick.GetZ();
+	}
+	else {
+		joyZPower = 0;
+	}
 
 	// double joyYPower = controller2.GetRawAxis(1);
 	// double joyZPower = controller2.GetRawAxis(4);
@@ -126,7 +150,7 @@ void Robot::TeleopPeriodic()
 	// std::cout << "GetRate:" << ahrs->GetRate() << "\n"; 
 	// std::cout << "GetOffset:" << m_gyro.GetOffset() << "\n"; 
 	
-	// double YawRads = ahrs->GetAngle() * (M_PI / 180);
+	double YawRads = ahrs->GetAngle() * (M_PI / 180);
 	// double YawX = cos(YawRads);
 	// double YawY = sin(YawRads);
 
@@ -137,23 +161,36 @@ void Robot::TeleopPeriodic()
  // Invert stick Y axis
 	// double x_rotated = joyXPower * cos(YawRads) - joyYPower * sin(YawRads);
 	// double y_rotated = joyXPower * sin(YawRads) + joyYPower * cos(YawRads);
-	double x_rotated = joyXPower;
-	double y_rotated = joyYPower;
+	double fieldVelocityHeading;
+	// if (joyXPower < 0) {
+	  fieldVelocityHeading = std::atan(joyXPower / joyYPower);
+	// }
+	// else {
+	//   fieldVelocityHeading = std::atan(joyXPower / joyYPower) + M_PI;
+	// }
+
+	double robotVelocityHeading = YawRads + fieldVelocityHeading;
+
+	double RobotSpeed = sqrt(pow(joyXPower, 2) + pow(joyYPower, 2));
+
+
+	double x_rotated = cos(robotVelocityHeading) * RobotSpeed;
+	double y_rotated = sin(robotVelocityHeading) * RobotSpeed;
 
 	double motors [4] = {0,0,0,0};
 
-	if (std::abs(joystick.GetX()) > 0.15 )
-	{
+	// if (std::abs(joystick.GetX()) > 0.15 )
+	// {
 		// if going left, spin left wheels outer from eachother, spin right inner
 		motors[0] += (x_rotated);
 		motors[1] += (-x_rotated);
 
 		motors[2] += (-x_rotated);
 		motors[3] += (x_rotated);
-	}
+	// }
 
-	if (std::abs(joystick.GetY()) > 0.2 )
-	{
+	// if (std::abs(joystick.GetY()) > 0.2 )
+	// {
 		// left
 		motors[0] += (y_rotated);
 		motors[1] += (y_rotated);
@@ -161,10 +198,10 @@ void Robot::TeleopPeriodic()
 		// right
 		motors[2] += (-y_rotated);
 		motors[3] += (-y_rotated);
-	}
+	// }
 
-	if (std::abs(joystick.GetZ()) > 0.4 )
-	{
+	// if (std::abs(joystick.GetZ()) > 0.4 )
+	// {
 		// left
 		motors[0] -= (joyZPower);
 		motors[1] -= (joyZPower);
@@ -172,7 +209,8 @@ void Robot::TeleopPeriodic()
 		// right
 		motors[2] -= (joyZPower);
 		motors[3] -= (joyZPower);
-	}
+	// }
+
 
 	frontL.Set(motors[0] * speed);
 	backL.Set(motors[1] * speed);
