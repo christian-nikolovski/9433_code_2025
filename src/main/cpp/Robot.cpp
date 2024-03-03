@@ -99,7 +99,7 @@ void Robot::TeleopPeriodic()
 	// create drive object	
 	// // DeadZone, MaxSpeed
 	//Drive newMec(0.02, 0.8);
-	double joyYPower = joystick.GetY() * fabs(joystick.GetY());
+	double joyYPower = joystick.GetY() * fabs(joystick.GetY()) * 0.85;
 	double joyZPower = joystick.GetZ() * fabs(joystick.GetZ());
 	double joyXPower = joystick.GetX() * fabs(joystick.GetX());
 	//double joySliderPower = 1 - ((joystick.GetRawAxis(4) + 1) / 2);
