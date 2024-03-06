@@ -190,11 +190,11 @@ void Robot::TeleopPeriodic()
 	// }
 
 
-	frontL.Set(motors[0] * speed);
-	backL.Set(motors[1] * speed);
+	frontL.Set(motors[0]);
+	backL.Set(motors[1]);
 
-	backR.Set(motors[2] * speed);
-	frontR.Set(motors[3] * speed);
+	backR.Set(motors[2]);
+	frontR.Set(motors[3]);
 
 	// Create new arm object
 	double _leftJoy = -controller.GetRawAxis(1); 
