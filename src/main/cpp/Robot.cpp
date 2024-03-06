@@ -99,33 +99,11 @@ void Robot::TeleopPeriodic()
 	// create drive object	
 	// // DeadZone, MaxSpeed
 	//Drive newMec(0.02, 0.8);
-	double joyYPower;
-	double joyZPower;
-	double joyXPower;
+	
 
-	if (std::abs(joystick.GetY()) > 0.15 )
-	{
-		joyXPower = joystick.GetY();
-	}
-	else {
-		joyXPower = 0;
-	}
-
-	if (std::abs(joystick.GetX()) > 0.2 )
-	{
-		joyYPower = joystick.GetX();
-	}
-	else {
-		joyYPower = 0;
-	}
-
-	if (std::abs(joystick.GetZ()) > 0.4 )
-	{
-		joyZPower = joystick.GetZ();
-	}
-	else {
-		joyZPower = 0;
-	}
+	double joyXPower = controller2.GetRawAxis(1) * fabs(controller2.GetRawAxis(1)); 
+	double joyYPower = controller2.GetRawAxis(0) * fabs(controller2.GetRawAxis(0));
+	double joyZPower = controller2.GetRawAxis(4);
 
 	// double joyYPower = controller2.GetRawAxis(1);
 	// double joyZPower = controller2.GetRawAxis(4);
@@ -163,7 +141,7 @@ void Robot::TeleopPeriodic()
 	// double y_rotated = joyXPower * sin(YawRads) + joyYPower * cos(YawRads);
 	double fieldVelocityHeading;
 	// if (joyXPower < 0) {
-	  fieldVelocityHeading = std::atan(joyXPower / joyYPower);
+	fieldVelocityHeading = std::atan(joyXPower / joyYPower);
 	// }
 	// else {
 	//   fieldVelocityHeading = std::atan(joyXPower / joyYPower) + M_PI;
