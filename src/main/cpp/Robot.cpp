@@ -140,12 +140,12 @@ void Robot::TeleopPeriodic()
 	// double x_rotated = joyXPower * cos(YawRads) - joyYPower * sin(YawRads);
 	// double y_rotated = joyXPower * sin(YawRads) + joyYPower * cos(YawRads);
 	double fieldVelocityHeading;
-	// if (joyXPower < 0) {
+	if (joyXPower < 0) {
 	fieldVelocityHeading = std::atan(joyXPower / joyYPower);
-	// }
-	// else {
-	//   fieldVelocityHeading = std::atan(joyXPower / joyYPower) + M_PI;
-	// }
+	}
+	else {
+	  fieldVelocityHeading = std::atan(joyXPower / joyYPower) + M_PI;
+	}
 
 	double robotVelocityHeading = YawRads + fieldVelocityHeading;
 
