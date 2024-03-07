@@ -80,6 +80,9 @@ void Robot::AutonomousPeriodic()
 
 	// }
 
+	// std::cout << "GetDisX:" << ahrs->GetDisplacementX() << "\n";
+	// std::cout << "GetDisY:" << ahrs->GetDisplacementY() << "\n";
+	// std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
 }
 
 void Robot::TeleopInit() 
@@ -93,12 +96,7 @@ void Robot::TeleopPeriodic()
 	// it will stay at the loop until it is completed (essentially freezing your robot).
 	// Teleop is already called every cycle, so use this to your advantage.
 
-	//backL.Set(0.5);
-
 	using namespace frc;
-	// create drive object	
-	// // DeadZone, MaxSpeed
-	//Drive newMec(0.02, 0.8);
 	
 
 	double joyXPower = controller2.GetRawAxis(1) * fabs(controller2.GetRawAxis(1)); 
@@ -109,36 +107,12 @@ void Robot::TeleopPeriodic()
 	// double joyZPower = controller2.GetRawAxis(4);
 	// double joyXPower = controller2.GetRawAxis(0); 
 
-	// if (fabs(joyYPower) > 0.1)
-	// {
-	// 	joyXPower = joystick.GetX() * fabs(joystick.GetX());
-	// }
-	// else
-	// {
-	// 	joyXPower = 0;
-	// }
-
-	
 
 	//std::cout << "GetAngle:" << ahrs->GetAngle() << "\n";
 	// std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
-	// std::cout << "GetDisX:" << ahrs->GetDisplacementX() << "\n";
-	// std::cout << "GetDisY:" << ahrs->GetDisplacementY() << "\n";
-	
-	// std::cout << "GetRate:" << ahrs->GetRate() << "\n"; 
-	// std::cout << "GetOffset:" << m_gyro.GetOffset() << "\n"; 
 	
 	double YawRads = ahrs->GetAngle() * (M_PI / 180);
-	// double YawX = cos(YawRads);
-	// double YawY = sin(YawRads);
 
-	// frc::Rotation2d YawFinal = Rotation2d(YawX, YawY);
-
-	//mec_drive.DriveCartesian(joyZPower * speed, joyXPower * speed, joyYPower * speed);
-	//Wait(0.005_s); // wait 5ms to avoid hogging CPU cycles
- // Invert stick Y axis
-	// double x_rotated = joyXPower * cos(YawRads) - joyYPower * sin(YawRads);
-	// double y_rotated = joyXPower * sin(YawRads) + joyYPower * cos(YawRads);
 	double fieldVelocityHeading;
 	if (joyXPower < 0) {
 	fieldVelocityHeading = std::atan(joyXPower / joyYPower);
@@ -157,18 +131,15 @@ void Robot::TeleopPeriodic()
 
 	double motors [4] = {0,0,0,0};
 
-	// if (std::abs(joystick.GetX()) > 0.15 )
-	// {
 		// if going left, spin left wheels outer from eachother, spin right inner
+		/// apply strafe
 		motors[0] += (x_rotated);
 		motors[1] += (-x_rotated);
 
 		motors[2] += (-x_rotated);
 		motors[3] += (x_rotated);
-	// }
 
-	// if (std::abs(joystick.GetY()) > 0.2 )
-	// {
+		/// apply forward and backwards
 		// left
 		motors[0] += (y_rotated);
 		motors[1] += (y_rotated);
@@ -176,10 +147,8 @@ void Robot::TeleopPeriodic()
 		// right
 		motors[2] += (-y_rotated);
 		motors[3] += (-y_rotated);
-	// }
 
-	// if (std::abs(joystick.GetZ()) > 0.4 )
-	// {
+		/// apply rotation
 		// left
 		motors[0] -= (joyZPower);
 		motors[1] -= (joyZPower);
@@ -187,7 +156,6 @@ void Robot::TeleopPeriodic()
 		// right
 		motors[2] -= (joyZPower);
 		motors[3] -= (joyZPower);
-	// }
 
 
 	frontL.Set(motors[0]);
@@ -203,13 +171,6 @@ void Robot::TeleopPeriodic()
 
 	double _rightJoy = controller.GetRawAxis(5);
 	int _bButton = controller.GetRawButton(2);
-
-	// if (_bButton) {
-	// 	arm.Set(-0.1);
-	// }
-	// else {
-	// 	arm.Set(0);
-	// }
 
 
     double leftPower = leftJoy;
@@ -227,15 +188,6 @@ void Robot::TeleopPeriodic()
 
 	
 
-	// if (_bButton)
-	// {
-	// 	shooter.Set(-1);
-	// 	// std::cout << "SHOOT!" << "\n"; 
-	// }
-	// else
-	// {
-	// 	shooter.Set(0);
-	// }
 	int _yButton = controller.GetRawButton(4);
 	int _aButton = controller.GetRawButton(1);
 
@@ -252,25 +204,6 @@ void Robot::TeleopPeriodic()
 		climber.Set(0);
 	}
     
-    // if (_bButton)
-    // {
-    //     bendOne.Set(0);
-	// 	bendTwo.Set(0);
-    // }
-    // else if (joyYPower < 0.7)
-    // {
-    //     bendOne.Set(-rightPower * maxSpeed);
-    //     bendTwo.Set(-leftPower * maxSpeed);
-    // }
-	// else if (joyYPower > 0.7)
-	// {
-	// 	bendOne.Set(ControlMode::PercentOutput,-0.1);
-	// 	bendTwo.Set(ControlMode::PercentOutput,0.1); 
-	//}
-
-
-	// int _lBumper = controller.GetRawButton(5);
-	// int _rBumper = controller.GetRawButton(6);
 
     if (_leftJoy >= 0.1)
     {
