@@ -102,6 +102,7 @@ class Robot : public frc::TimedRobot {
 	double armSpeed = 1;
 
 	frc::SlewRateLimiter<units::scalar> filter{0.9 / 1_s};	
+	frc::SlewRateLimiter<units::scalar> signFilter{0.5 / 1_s};	
 
 
 	

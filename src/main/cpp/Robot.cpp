@@ -99,8 +99,8 @@ void Robot::TeleopPeriodic()
 	using namespace frc;
 	
 
-	double joyXPower = controller2.GetRawAxis(0) * fabs(controller2.GetRawAxis(0)); 
-	double joyYPower = controller2.GetRawAxis(1) * fabs(controller2.GetRawAxis(1));
+	double joyXPower = controller2.GetRawAxis(1) * fabs(controller2.GetRawAxis(1)); 
+	double joyYPower = controller2.GetRawAxis(0) * fabs(controller2.GetRawAxis(0)) * -1;
 	// double joyXPower = controller2.GetRawAxis(0); 
 	// double joyYPower = controller2.GetRawAxis(1);
 	double joyZPower = controller2.GetRawAxis(4);
@@ -111,10 +111,10 @@ void Robot::TeleopPeriodic()
 
 
 	//std::cout << "GetAngle:" << ahrs->GetAngle() << "\n";
-	std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
-	std::cout << "GetRadsSin:" << sin(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
-	std::cout << "GetRadsCos:" << cos(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
-	std::cout << "GetRadsTan:" << tan(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
+	// std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
+	// std::cout << "GetRadsSin:" << sin(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
+	// std::cout << "GetRadsCos:" << cos(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
+	// std::cout << "GetRadsTan:" << tan(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
 	
 	double YawRads = ahrs->GetAngle() * (M_PI / 180);
 
@@ -136,13 +136,16 @@ void Robot::TeleopPeriodic()
 
 	// double x_rotated = cos(robotVelocityHeading) * RobotSpeed;
 	// double y_rotated = sin(robotVelocityHeading) * RobotSpeed;
-	float temp = joyYPower * cos(YawRads) + joyXPower * sin(YawRads);
-	float tempX = -joyYPower * sin(YawRads) + joyXPower * cos(YawRads);
+	float temp = joyYPower * sin(YawRads) + joyXPower * cos(YawRads);
+	float tempX = -joyYPower * cos(YawRads) + joyXPower * sin(YawRads);
 	joyYPower = temp;
 	joyXPower = tempX;
-	float sinSign = (sin(YawRads) > 0) ? 1 : -1;
-	float x_rotated = joyXPower * sinSign;
-	float y_rotated = joyYPower * sinSign;
+	// float sinSign = (sin(YawRads) > 0.01) ? 1 : -1;
+	// std::cout << "sin:" << sin(YawRads) << "\n";
+	// std::cout << "cos:" << cos(YawRads) << "\n";
+	// std::cout << "tan:" << tan(YawRads) << "\n";
+	float x_rotated = joyXPower;
+	float y_rotated = joyYPower;
 
 	double motors [4] = {0,0,0,0};
 
