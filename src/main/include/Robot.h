@@ -20,6 +20,7 @@
 #include "AHRS.h"
 #include <iostream>
 #include <rev/CANSparkMax.h>
+#include <frc/controller/PIDController.h>
 
 class Robot : public frc::TimedRobot {
  AHRS *ahrs;  
@@ -98,11 +99,17 @@ class Robot : public frc::TimedRobot {
 
 	
 	double maxSpeed = 0.9;
-	double autoSpeed = -0.5; 
+	double autoSpeed = 0.25; 
 	double armSpeed = 1;
 
 	frc::SlewRateLimiter<units::scalar> filter{0.9 / 1_s};	
 	frc::SlewRateLimiter<units::scalar> signFilter{0.5 / 1_s};	
+
+	// auto code things
+
+	frc::PIDController moveYPID{0.5, 0, 0};
+	frc::PIDController moveXPID{0.5, 0, 0};
+	frc::PIDController rotatePID{0.5, 0, 0};
 
 
 	
