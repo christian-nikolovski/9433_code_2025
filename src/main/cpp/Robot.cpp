@@ -99,8 +99,10 @@ void Robot::TeleopPeriodic()
 	using namespace frc;
 	
 
-	double joyXPower = controller2.GetRawAxis(1) * fabs(controller2.GetRawAxis(1)); 
-	double joyYPower = controller2.GetRawAxis(0) * fabs(controller2.GetRawAxis(0));
+	double joyXPower = controller2.GetRawAxis(0) * fabs(controller2.GetRawAxis(0)); 
+	double joyYPower = controller2.GetRawAxis(1) * fabs(controller2.GetRawAxis(1));
+	// double joyXPower = controller2.GetRawAxis(0); 
+	// double joyYPower = controller2.GetRawAxis(1);
 	double joyZPower = controller2.GetRawAxis(4);
 
 	// double joyYPower = controller2.GetRawAxis(1);
@@ -109,25 +111,38 @@ void Robot::TeleopPeriodic()
 
 
 	//std::cout << "GetAngle:" << ahrs->GetAngle() << "\n";
-	// std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
+	std::cout << "GetRads:" << ahrs->GetAngle() * (M_PI / 180) << "\n"; 
+	std::cout << "GetRadsSin:" << sin(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
+	std::cout << "GetRadsCos:" << cos(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
+	std::cout << "GetRadsTan:" << tan(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
 	
 	double YawRads = ahrs->GetAngle() * (M_PI / 180);
 
-	double fieldVelocityHeading;
-	if (joyXPower < 0) {
-	fieldVelocityHeading = std::atan(joyXPower / joyYPower);
-	}
-	else {
-	  fieldVelocityHeading = std::atan(joyXPower / joyYPower) + M_PI;
-	}
+	// double fieldVelocityHeading;
+	// if (joyXPower > 0) {
+	// fieldVelocityHeading = std::atan(joyXPower / joyYPower);
+	// }
+	// else if (joyXPower < 0 && joyYPower > 0) {
+	//   fieldVelocityHeading = std::atan(joyXPower / joyYPower) + M_PI;
+	// }
+	// else (
+	//   fieldVelocityHeading = std::atan(joyXPower / joyYPower) - M_PI
+	// );
 
-	double robotVelocityHeading = YawRads + fieldVelocityHeading;
+	// double robotVelocityHeading = YawRads + fieldVelocityHeading;
 
-	double RobotSpeed = sqrt(pow(joyXPower, 2) + pow(joyYPower, 2));
+	// double RobotSpeed = sqrt(pow(joyXPower, 2) + pow(joyYPower, 2));
 
 
-	double x_rotated = cos(robotVelocityHeading) * RobotSpeed;
-	double y_rotated = sin(robotVelocityHeading) * RobotSpeed;
+	// double x_rotated = cos(robotVelocityHeading) * RobotSpeed;
+	// double y_rotated = sin(robotVelocityHeading) * RobotSpeed;
+	float temp = joyYPower * cos(YawRads) + joyXPower * sin(YawRads);
+	float tempX = -joyYPower * sin(YawRads) + joyXPower * cos(YawRads);
+	joyYPower = temp;
+	joyXPower = tempX;
+	float sinSign = (sin(YawRads) > 0) ? 1 : -1;
+	float x_rotated = joyXPower * sinSign;
+	float y_rotated = joyYPower * sinSign;
 
 	double motors [4] = {0,0,0,0};
 
