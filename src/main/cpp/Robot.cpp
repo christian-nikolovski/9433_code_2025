@@ -195,6 +195,8 @@ void Robot::TeleopPeriodic()
 
 	double motors [4] = {0,0,0,0};
 
+		// TODO: comine strafe, forward and rotate into one pair
+
 		// if going left, spin left wheels outer from eachother, spin right inner
 		/// apply strafe
 		motors[0] += (x_rotated);
