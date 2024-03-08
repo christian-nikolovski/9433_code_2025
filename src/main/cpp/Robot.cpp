@@ -43,6 +43,11 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() 
 {
+	hasMovedX = false;
+	hasMovedY = false;
+	hasRotated = false;
+
+
 	// Auto newAuto;
 
 	//newAuto.TimedAutoArmBendTwo(2000, -0.4);
@@ -73,15 +78,15 @@ void Robot::AutonomousPeriodic()
     using namespace std::this_thread;
 	using namespace std::chrono;
 
-	float displacementX = ahrs->GetDisplacementX();
-	float displacementY = ahrs->GetDisplacementY();
-	float rotation = ahrs->GetAngle() * (M_PI / 180);
+	double displacementX = ahrs->GetDisplacementX();
+	double displacementY = ahrs->GetDisplacementY();
+	double rotation = ahrs->GetAngle() * (M_PI / 180);
 
 
 	double motors [4] = {0,0,0,0};
 	
 	if (hasMovedY == false) {
-		float moveSpeed = moveYPID.Calculate(displacementY, 1) * autoSpeed;
+		double moveSpeed = moveYPID.Calculate(displacementY, 1) * autoSpeed;
 
 		// left
 		motors[0] += (moveSpeed);
@@ -97,7 +102,7 @@ void Robot::AutonomousPeriodic()
 	}
 
 	if (hasRotated == false && hasMovedY == true) {
-		float rotateSpeed = rotatePID.Calculate(rotation, 0.5) * autoSpeed;
+		double rotateSpeed = rotatePID.Calculate(rotation, 0.5) * autoSpeed;
 
 		// left
 		motors[0] -= (rotateSpeed);
@@ -114,7 +119,7 @@ void Robot::AutonomousPeriodic()
 	}
 
 	if (hasMovedX == false && hasRotated == true && hasMovedY == true) {
-		float moveSpeed = moveXPID.Calculate(displacementX, -1) * autoSpeed;
+		double moveSpeed = moveXPID.Calculate(displacementX, -1) * autoSpeed;
 
 		// left
 		motors[0] += (moveSpeed);
@@ -180,13 +185,13 @@ void Robot::TeleopPeriodic()
 	
 	double YawRads = ahrs->GetAngle() * (M_PI / 180);
 
-	float temp = joyYPower * sin(YawRads) + joyXPower * cos(YawRads);
-	float tempX = -joyYPower * cos(YawRads) + joyXPower * sin(YawRads);
+	double temp = joyYPower * sin(YawRads) + joyXPower * cos(YawRads);
+	double tempX = -joyYPower * cos(YawRads) + joyXPower * sin(YawRads);
 	joyYPower = temp;
 	joyXPower = tempX;
 
-	float x_rotated = joyXPower;
-	float y_rotated = joyYPower;
+	double x_rotated = joyXPower;
+	double y_rotated = joyYPower;
 
 	double motors [4] = {0,0,0,0};
 
