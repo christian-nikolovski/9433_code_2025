@@ -87,7 +87,6 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit() 
 {
-	ahrs->Reset();
 }
 
 void Robot::TeleopPeriodic() 
