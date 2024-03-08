@@ -77,9 +77,6 @@ void Robot::AutonomousPeriodic()
 	float displacementY = ahrs->GetDisplacementY();
 	float rotation = ahrs->GetAngle() * (M_PI / 180);
 
-	bool hasMovedY = false;
-	bool hasRotated = false;
-	bool hasMovedX = false;
 
 	double motors [4] = {0,0,0,0};
 	

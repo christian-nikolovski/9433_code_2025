@@ -112,5 +112,8 @@ class Robot : public frc::TimedRobot {
 	frc::PIDController rotatePID{0.5, 0, 0};
 
 
+	bool hasMovedY = false;
+	bool hasRotated = false;
+	bool hasMovedX = false;
 	
 };
