@@ -26,10 +26,11 @@ void Robot::RobotInit() {
 	std::cout << "-- LTBT Robot Program Start --" << std::endl;
 
 	cs::UsbCamera camera = frc::CameraServer::StartAutomaticCapture();
-	ahrs->Reset();
 	camera.SetResolution(640, 480);
 	cs::CvSink cvSink = frc::CameraServer::GetVideo();
 	cs::CvSource outputStream = frc::CameraServer::PutVideo("Video", 640, 480);
+	
+	ahrs->Reset();
 	
 	// frc::CameraServer::StartAutomaticCapture();
 
