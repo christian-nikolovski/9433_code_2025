@@ -20,7 +20,7 @@ Drive::Drive(double deadZone, double maxSpeed)
 
 }
 
-void Drive::MecDrive(double joyY, double joyX, double joyZ)
+void Drive::MecDrive(double joyX, double joyY, double joyZ)
 {
 
 	// squares joystick intensity for finer control. This is not done for mecanum drive but is automatically done for drive train
