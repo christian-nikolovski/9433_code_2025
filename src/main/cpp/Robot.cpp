@@ -179,14 +179,14 @@ void Robot::TeleopPeriodic()
 	// std::cout << "GetRadsCos:" << cos(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
 	// std::cout << "GetRadsTan:" << tan(ahrs->GetAngle() * (M_PI / 180)) << "\n"; 
 
-	double joyXPower = controller2.GetRawAxis(1) * fabs(controller2.GetRawAxis(1)); 
-	double joyYPower = controller2.GetRawAxis(0) * fabs(controller2.GetRawAxis(0)) * -1;
+	double joyXPower = controller2.GetRawAxis(0) * fabs(controller2.GetRawAxis(0)) * -1; 
+	double joyYPower = controller2.GetRawAxis(1) * fabs(controller2.GetRawAxis(1));
 	double joyZPower = controller2.GetRawAxis(4);
 	
 	double YawRads = ahrs->GetAngle() * (M_PI / 180);
 
-	double temp = joyYPower * sin(YawRads) + joyXPower * cos(YawRads);
-	double tempX = -joyYPower * cos(YawRads) + joyXPower * sin(YawRads);
+	double temp = joyYPower * cos(YawRads) + joyXPower * sin(YawRads);
+	double tempX = -joyYPower * sin(YawRads) + joyXPower * cos(YawRads);
 	joyYPower = temp;
 	joyXPower = tempX;
 
