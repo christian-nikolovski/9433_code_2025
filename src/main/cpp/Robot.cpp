@@ -143,7 +143,8 @@ void Robot::AutonomousPeriodic()
 		frontR.Set(0);
 
 		intake.Set(-0.6);
-		sleep_for(milliseconds(3000));
+		// sleep_for(milliseconds(3000));
+		frc::Wait(3_s);
 		intake.Set(0);
 	} 
 
@@ -155,6 +156,8 @@ void Robot::AutonomousPeriodic()
 
 	backR.Set(motors[2]);
 	frontR.Set(motors[3]);
+
+	frc::Wait(0.02_s);
 
 	// std::cout << "GetDisX:" << ahrs->GetDisplacementX() << "\n";
 	// std::cout << "GetDisY:" << ahrs->GetDisplacementY() << "\n";
