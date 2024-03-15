@@ -86,7 +86,7 @@ void Robot::AutonomousPeriodic()
 	double motors [4] = {0,0,0,0};
 	
 	if (hasMovedY == false) {
-		double moveSpeed = moveYPID.Calculate(displacementY, 1) * autoSpeed;
+		double moveSpeed = moveYPID.Calculate(displacementY, 1.94) * autoSpeed;
 
 		// left
 		motors[0] += (moveSpeed);
@@ -119,7 +119,7 @@ void Robot::AutonomousPeriodic()
 	}
 
 	if (hasMovedX == false && hasRotated == true && hasMovedY == true) {
-		double moveSpeed = moveXPID.Calculate(displacementX, -1) * autoSpeed;
+		double moveSpeed = moveXPID.Calculate(displacementX, -1.07) * autoSpeed;
 
 		// left
 		motors[0] += (moveSpeed);
