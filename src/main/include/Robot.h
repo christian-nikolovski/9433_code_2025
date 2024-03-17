@@ -21,6 +21,7 @@
 #include <iostream>
 #include <rev/CANSparkMax.h>
 #include <frc/controller/PIDController.h>
+#include <frc/Timer.h>
 
 class Robot : public frc::TimedRobot {
  AHRS *ahrs;  
@@ -115,5 +116,10 @@ class Robot : public frc::TimedRobot {
 	bool hasMovedY;
 	bool hasRotated;
 	bool hasMovedX;
+	bool autoDone = false;
+	int autoTime = 0;
+
+	frc::Timer autoTimer;
+	
 	
 };

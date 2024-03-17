@@ -20,6 +20,7 @@
 #include <frc/TimedRobot.h>
 
 
+
 #include <frc/smartdashboard/SmartDashboard.h>
 
 void Robot::RobotInit() {
@@ -43,9 +44,12 @@ void Robot::RobotPeriodic() {}
 
 void Robot::AutonomousInit() 
 {
-	hasMovedX = false;
-	hasMovedY = false;
-	hasRotated = false;
+	// hasMovedX = false;
+	// hasMovedY = false;
+	// hasRotated = false;
+	// autoDone = false;
+	autoTimer.Reset();
+	autoTimer.Start();
 
 
 	// Auto newAuto;
@@ -59,13 +63,14 @@ void Robot::AutonomousInit()
 	//newAuto.TimedAutoMecDrive(10000, 0.0, -0.25, 0.0);
     // using namespace std::this_thread;
 	// using namespace std::chrono;
-	// // set motors fo move backwards
-	// backL.Set(autoSpeed);
-	// backR.Set(autoSpeed);
-	// frontL.Set(autoSpeed);
-	// frontR.Set(autoSpeed);
-	// // sleep for 5 seconds
+	// set motors fo move backwards
 	// sleep_for(milliseconds(5000));
+	// backL.Set(-0.5);
+	// backR.Set(0.5);
+	// frontL.Set(-0.5);
+	// frontR.Set(0.5);
+	// // sleep for 5 seconds
+	// frc::Wait(10_s);
 	// // set motors to stop
 	// backL.Set(0);
 	// backR.Set(0);
@@ -75,89 +80,117 @@ void Robot::AutonomousInit()
 
 void Robot::AutonomousPeriodic() 
 {
-    using namespace std::this_thread;
-	using namespace std::chrono;
-
-	double displacementX = ahrs->GetDisplacementX();
-	double displacementY = ahrs->GetDisplacementY();
-	double rotation = ahrs->GetAngle() * (M_PI / 180);
-
-
-	double motors [4] = {0,0,0,0};
+    
 	
-	if (hasMovedY == false) {
-		double moveSpeed = moveYPID.Calculate(displacementY, 1.94) * autoSpeed;
-
-		// left
-		motors[0] += (moveSpeed);
-		motors[1] += (moveSpeed);
-
-		// right
-		motors[2] += (-moveSpeed);
-		motors[3] += (-moveSpeed);
-
-		if (moveYPID.AtSetpoint()) {
-			hasMovedY = true;
-		}
+	if (!autoTimer.HasElapsed(2_s)) {
+		backL.Set(-0.3);
+		backR.Set(0.3);
+		frontL.Set(-0.3);
+		frontR.Set(0.3);
 	}
-
-	if (hasRotated == false && hasMovedY == true) {
-		double rotateSpeed = rotatePID.Calculate(rotation, 0.5) * autoSpeed;
-
-		// left
-		motors[0] -= (rotateSpeed);
-		motors[1] -= (rotateSpeed);
-
-		// right
-		motors[2] -= (rotateSpeed);
-		motors[3] -= (rotateSpeed);
-
-		if (rotatePID.AtSetpoint()) {
-			hasRotated = true;
-		}
-
-	}
-
-	if (hasMovedX == false && hasRotated == true && hasMovedY == true) {
-		double moveSpeed = moveXPID.Calculate(displacementX, -1.07) * autoSpeed;
-
-		// left
-		motors[0] += (moveSpeed);
-		motors[1] += (moveSpeed);
-
-		// right
-		motors[2] += (-moveSpeed);
-		motors[3] += (-moveSpeed);
-
-		if (moveXPID.AtSetpoint()) {
-			hasMovedX = true;
-		}
-
-	}	
-
-	if (hasMovedX == true) {
-		// set motors to stop
+	else {
 		backL.Set(0);
 		backR.Set(0);
 		frontL.Set(0);
-		frontR.Set(0);
+		frontR.Set(0); 
+		autoTimer.Stop();
+	}
+	// frc::Wait(0.02_s);
+	// // set motors to stop
+	// if (autoTime >= 75) {
+	// 	backL.Set(0);
+	// 	backR.Set(0);
+	// 	frontL.Set(0);
+	// 	frontR.Set(0);
+	// 	autoDone = true;
+	// }
 
-		intake.Set(-0.6);
-		// sleep_for(milliseconds(3000));
-		frc::Wait(3_s);
-		intake.Set(0);
-	} 
+	
+	
+	
+	// using namespace std::this_thread;
+	// using namespace std::chrono;
+
+	// double displacementX = ahrs->GetDisplacementX();
+	// double displacementY = ahrs->GetDisplacementY();
+	// double rotation = ahrs->GetAngle() * (M_PI / 180);
+
+
+	// double motors [4] = {0,0,0,0};
+	
+	// if (hasMovedY == false) {
+	// 	double moveSpeed = moveYPID.Calculate(displacementY, 1.94) * autoSpeed;
+
+	// 	// left
+	// 	motors[0] += (moveSpeed);
+	// 	motors[1] += (moveSpeed);
+
+	// 	// right
+	// 	motors[2] += (-moveSpeed);
+	// 	motors[3] += (-moveSpeed);
+
+	// 	if (moveYPID.AtSetpoint()) {
+	// 		hasMovedY = true;
+	// 	}
+	// }
+
+	// if (hasRotated == false && hasMovedY == true) {
+	// 	double rotateSpeed = rotatePID.Calculate(rotation, 0.5) * autoSpeed;
+
+	// 	// left
+	// 	motors[0] -= (rotateSpeed);
+	// 	motors[1] -= (rotateSpeed);
+
+	// 	// right
+	// 	motors[2] -= (rotateSpeed);
+	// 	motors[3] -= (rotateSpeed);
+
+	// 	if (rotatePID.AtSetpoint()) {
+	// 		hasRotated = true;
+	// 	}
+
+	// }
+
+	// if (hasMovedX == false && hasRotated == true && hasMovedY == true) {
+	// 	double moveSpeed = moveXPID.Calculate(displacementX, -1.07) * autoSpeed;
+
+	// 	// left
+	// 	motors[0] += (moveSpeed);
+	// 	motors[1] += (moveSpeed);
+
+	// 	// right
+	// 	motors[2] += (-moveSpeed);
+	// 	motors[3] += (-moveSpeed);
+
+	// 	if (moveXPID.AtSetpoint()) {
+	// 		hasMovedX = true;
+	// 	}
+
+	// }	
+
+	// if (hasMovedX == true) {
+	// 	// set motors to stop
+	// 	backL.Set(0);
+	// 	backR.Set(0);
+	// 	frontL.Set(0);
+	// 	frontR.Set(0);
+
+	// 	intake.Set(-0.6);
+	// 	// sleep_for(milliseconds(3000));
+	// 	frc::Wait(3_s);
+	// 	intake.Set(0);
+	// } 
 
  
 
 
-	frontL.Set(motors[0]);
-	backL.Set(motors[1]);
+	// frontL.Set(motors[0]);
+	// backL.Set(motors[1]);
 
-	backR.Set(motors[2]);
-	frontR.Set(motors[3]);
+	// backR.Set(motors[2]);
+	// frontR.Set(motors[3]);
 
-	frc::Wait(0.02_s);
+	// frc::Wait(0.02_s);
 
 	// std::cout << "GetDisX:" << ahrs->GetDisplacementX() << "\n";
 	// std::cout << "GetDisY:" << ahrs->GetDisplacementY() << "\n";
@@ -184,10 +217,10 @@ void Robot::TeleopPeriodic()
 
 	double joyXPower = controller2.GetRawAxis(0) * fabs(controller2.GetRawAxis(0)) * -1; 
 	double joyYPower = controller2.GetRawAxis(1) * fabs(controller2.GetRawAxis(1));
-	double joyZPower = controller2.GetRawAxis(4);
+	double joyZPower = controller2.GetRawAxis(4) * 0.8;
 	
 	double YawRads = ahrs->GetAngle() * (M_PI / 180);
-
+ 
 	double temp = joyYPower * cos(YawRads) + joyXPower * sin(YawRads);
 	double tempX = -joyYPower * sin(YawRads) + joyXPower * cos(YawRads);
 	joyYPower = temp;
@@ -233,7 +266,7 @@ void Robot::TeleopPeriodic()
 	backR.Set(motors[2]);
 	frontR.Set(motors[3]);
 
-	Wait(0.02_s);
+	// Wait(0.02_s);
 
 	// Create new arm object
 	double _leftJoy = -controller.GetRawAxis(1); 
@@ -245,7 +278,7 @@ void Robot::TeleopPeriodic()
     double rightPower = _rightJoy * fabs(_rightJoy);
 
 	if (_rightJoy >= 0.1){
-		arm.Set(_rightJoy*_rightJoy*0.1);
+		arm.Set(_rightJoy*_rightJoy*0.15);
 	}
 	else if (_rightJoy <= -0.1){
 		arm.Set(_rightJoy*_rightJoy*-0.4);
@@ -275,7 +308,7 @@ void Robot::TeleopPeriodic()
 
     if (_leftJoy >= 0.1)
     {
-        armSpeed = _leftJoy*_leftJoy*1;
+        armSpeed = _leftJoy;
 		intake.Set(armSpeed);
      
     }
